@@ -1,8 +1,8 @@
-# goit-react-native-hw
+![react-native](./react-native-logo.png)
 
 ---
 
-![react-native](./react-native-logo.png)
+# goit-react-native-hw
 
 ---
 
