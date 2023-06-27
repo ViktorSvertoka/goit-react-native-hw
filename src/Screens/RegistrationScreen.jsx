@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   TextInput,
@@ -15,10 +15,8 @@ import {
   Dimensions,
 } from 'react-native';
 
-import { useFonts } from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen';
-
 import Add from '../image/add.svg';
+import Bg from '../image/bg-image.png';
 
 const RegistrationScreen = () => {
   const [login, setLogin] = useState(''); // Стан для збереження значення поля "Логін"
@@ -70,34 +68,14 @@ const RegistrationScreen = () => {
     Keyboard.dismiss(); // Закриття клавіатури
   };
 
-  const [fonts] = useFonts({
-    RobotoBold: require('../fonts/Roboto-Bold.ttf'), // Завантаження шрифту Roboto-Bold
-    RobotoRegular: require('../fonts/Roboto-Regular.ttf'), // Завантаження шрифту Roboto-Regular
-    RobotoMedium: require('../fonts/Roboto-Medium.ttf'), // Завантаження шрифту Roboto-Medium
-  });
-
-  const onLayoutRootView = useCallback(async () => {
-    if (fonts) {
-      await SplashScreen.hideAsync(); // Приховування сплеш-екрану після завантаження
-    }
-  }, [fonts]);
-
-  if (!fonts) {
-    return null; // Якщо шрифти ще не завантажені, повертаємо null
-  }
-
   return (
     <KeyboardAvoidingView
-      onLayout={onLayoutRootView}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
     >
       <TouchableWithoutFeedback onPress={keyboardIsHidden}>
         <View style={styles.containerFlex}>
-          <ImageBackground
-            style={styles.backgroundImg}
-            source={require('../image/bg-image.png')}
-          >
+          <ImageBackground style={styles.backgroundImg} source={Bg}>
             <ScrollView>
               <View
                 style={{
@@ -240,7 +218,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     lineHeight: 35,
     color: '#212121',
-    fontFamily: 'RobotoMedium',
+    fontWeight: '500',
   },
 
   input: {
@@ -252,7 +230,7 @@ const styles = StyleSheet.create({
     height: 50,
     borderWidth: 1,
     borderRadius: 8,
-    fontFamily: 'RobotoRegular',
+    fontWeight: '400',
     color: '#212121',
   },
 
@@ -267,7 +245,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 19,
     color: '#1B4371',
-    fontFamily: 'RobotoRegular',
+    fontWeight: '400',
   },
 
   button: {
@@ -283,7 +261,7 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     textAlign: 'center',
     color: '#FFFFFF',
-    fontFamily: 'RobotoBold',
+    fontWeight: '700',
   },
 
   footer: {
@@ -291,6 +269,6 @@ const styles = StyleSheet.create({
     marginBottom: 100,
     textAlign: 'center',
     color: '#1B4371',
-    fontFamily: 'RobotoRegular',
+    fontWeight: '400',
   },
 });
