@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   TextInput,
@@ -15,8 +15,8 @@ import {
   Dimensions,
 } from 'react-native';
 
-import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
+import Bg from '../image/bg-image.png';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState(''); // Стан для збереження введеної електронної пошти
@@ -70,24 +70,8 @@ const LoginScreen = () => {
     prepare();
   }, []);
 
-  const [fonts] = useFonts({
-    RobotoBold: require('../fonts/Roboto-Bold.ttf'), // Завантаження шрифту Roboto-Bold
-    RobotoRegular: require('../fonts/Roboto-Regular.ttf'), // Завантаження шрифту Roboto-Regular
-    RobotoMedium: require('../fonts/Roboto-Medium.ttf'), // Завантаження шрифту Roboto-Medium
-  });
-
-  const onLayoutRootView = useCallback(async () => {
-    if (fonts) {
-      await SplashScreen.hideAsync(); // Сховати сплеш-екран, коли шрифти завантажені
-    }
-  }, [fonts]);
-  if (!fonts) {
-    return null; // Показувати null, якщо шрифти ще завантажуються
-  }
-
   return (
     <KeyboardAvoidingView
-      onLayout={onLayoutRootView}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}
     >
@@ -99,7 +83,7 @@ const LoginScreen = () => {
               width: phoneWidth,
               height: phoneHeight,
             }}
-            source={require('../image/bg-image.png')}
+            source={Bg}
           >
             <ScrollView>
               <View
@@ -129,7 +113,6 @@ const LoginScreen = () => {
                     style={{
                       ...styles.input,
                       borderColor: focusPassword ? '#FF6C00' : '#E8E8E8',
-                      fontFamily: 'Roboto',
                     }}
                     onFocus={() => setFocusPassword(true)}
                     onBlur={() => setFocusPassword(false)}
@@ -205,7 +188,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     lineHeight: 35,
     color: '#212121',
-    fontFamily: 'RobotoMedium',
+    fontWeight: '500',
   },
 
   input: {
@@ -217,7 +200,7 @@ const styles = StyleSheet.create({
     height: 50,
     borderWidth: 1,
     borderRadius: 8,
-    fontFamily: 'RobotoRegular',
+    fontWeight: '400',
     color: '#212121',
   },
 
@@ -232,7 +215,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 19,
     color: '#1B4371',
-    fontFamily: 'RobotoRegular',
+    fontWeight: '400',
   },
 
   button: {
@@ -248,7 +231,7 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     textAlign: 'center',
     color: '#FFFFFF',
-    fontFamily: 'RobotoBold',
+    fontWeight: '700',
   },
 
   textLink: {
@@ -256,7 +239,7 @@ const styles = StyleSheet.create({
     marginBottom: 110,
     textAlign: 'center',
     color: '#1B4371',
-    fontFamily: 'RobotoRegular',
+    fontWeight: '400',
   },
 
   textLinkUnderline: {
