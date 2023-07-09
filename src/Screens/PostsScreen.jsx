@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-
-import { useNavigation } from '@react-navigation/native';
-
-import * as SplashScreen from 'expo-splash-screen';
+import { useNavigation } from '@react-navigation/native'; // Імпорт хука useNavigation з пакету @react-navigation/native
+import * as SplashScreen from 'expo-splash-screen'; // Імпорт методів SplashScreen з пакету expo-splash-screen
 import {
   TouchableOpacity,
   StyleSheet,
@@ -13,41 +11,41 @@ import {
   FlatList,
 } from 'react-native';
 
-import { postsScreenArray } from '../data/posts';
+import { postsScreenArray } from '../data/posts'; // Імпорт масиву postsScreenArray з файлу data/posts
 
-import UserAvatar from '../image/userAvatar.jpg';
-import Message from '../image/message.svg';
-import Like from '../image/like.svg';
-import Location from '../image/location.svg';
+import UserAvatar from '../image/userAvatar.jpg'; // Імпорт зображення UserAvatar з файлу image/userAvatar.jpg
+import Message from '../image/message.svg'; // Імпорт компонента Message з файлу image/message.svg
+import Like from '../image/like.svg'; // Імпорт компонента Like з файлу image/like.svg
+import Location from '../image/location.svg'; // Імпорт компонента Location з файлу image/location.svg
 
 const PostsScreen = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation(); // Навігація між екранами
 
   const [windowWidth, setWindowWidth] = useState(
     Dimensions.get('window').width
-  );
+  ); // Стан для збереження ширини вікна
 
-  const [posts, setPosts] = useState(postsScreenArray);
+  const [posts, setPosts] = useState(postsScreenArray); // Стан для збереження постів
 
   useEffect(() => {
     const onChange = () => {
       const width = Dimensions.get('window').width;
       setWindowWidth(width);
     };
-    const dimensionsHandler = Dimensions.addEventListener('change', onChange);
+    const dimensionsHandler = Dimensions.addEventListener('change', onChange); // Додавання слухача на зміни розміру вікна
 
-    return () => dimensionsHandler.remove();
+    return () => dimensionsHandler.remove(); // Видалення слухача при виході з компонента
   }, []);
 
   useEffect(() => {
     async function prepare() {
-      await SplashScreen.preventAutoHideAsync();
+      await SplashScreen.preventAutoHideAsync(); // Попереднє запобігання автоматичного приховування SplashScreen
     }
     prepare();
   }, []);
 
   const onLayoutRootView = useCallback(async () => {
-    await SplashScreen.hideAsync();
+    await SplashScreen.hideAsync(); // Приховування SplashScreen
   }, []);
 
   return (
@@ -158,6 +156,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 35,
   },
+
   userCardInformation: {
     flexDirection: 'row',
     justifyContent: 'space-between',
