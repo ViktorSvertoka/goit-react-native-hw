@@ -17,7 +17,7 @@ export const postsScreenArray = [
   },
   {
     id: 3,
-    img: require('../image/oldHouse.jpg'),
+    img: require('../image/oldhouse.jpg'),
     title: 'Старий будиночок у Венеції',
     location: 'Italy',
     comments: 50,
@@ -44,7 +44,7 @@ export const profilePostArray = [
   },
   {
     id: 3,
-    img: require('../image/oldHouse.jpg'),
+    img: require('../image/oldhouse.jpg'),
     title: 'Старий будиночок у Венеції',
     location: 'Italy',
     comments: 50,
