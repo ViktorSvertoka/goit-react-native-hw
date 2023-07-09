@@ -143,7 +143,12 @@ const LoginScreen = () => {
                   <TouchableOpacity>
                     <Text style={styles.textLink}>
                       Немає акаунту?
-                      <Text style={styles.textLinkUnderline}>
+                      <Text
+                        style={styles.textLinkUnderline}
+                        onPress={() =>
+                          navigation.navigate('RegistrationScreen')
+                        }
+                      >
                         Зареєстуватися
                       </Text>
                     </Text>
