@@ -49,11 +49,22 @@ const LoginScreen = () => {
   const emailSave = email => setEmail(email); // Функція для збереження введеної електронної пошти
   const passwordSave = password => setPassword(password); // Функція для збереження введеного пароля
 
+  // Функція для перевірки валідності адреси електронної пошти
+  const validateEmail = email => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const onLogin = () => {
     if (!email.trim() || !password.trim()) {
       Alert.alert(`Усі поля мають бути заповнені!`); // Перевірка на заповненість полів електронної пошти та пароля
       return;
     }
+    if (!validateEmail(email)) {
+      Alert.alert(`Некоректна адреса електронної пошти!`); // Попередження, якщо адреса електронної пошти некоректна
+      return;
+    }
+
     Alert.alert(`${email}, успішно увійшли!`); // Виведення повідомлення про успішний вхід
     console.log('email' - email, 'password' - password); // Виведення електронної пошти та пароля у консоль
 
