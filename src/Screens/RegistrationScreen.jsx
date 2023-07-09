@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import {
   StyleSheet,
   TextInput,
@@ -19,6 +20,8 @@ import Add from '../image/add.svg';
 import Bg from '../image/bg-image.png';
 
 const RegistrationScreen = () => {
+  const navigation = useNavigation(); //!--------------------------------------------
+
   const [login, setLogin] = useState(''); // Стан для збереження значення поля "Логін"
   const [focusLogin, setFocusLogin] = useState(false); // Стан для визначення активності поля "Логін"
 
@@ -62,6 +65,8 @@ const RegistrationScreen = () => {
     setEmail(''); // Скидання значення поля "Адреса електронної пошти"
     setPassword(''); // Скидання значення поля "Пароль"
     Keyboard.dismiss(); // Закриття клавіатури
+
+    navigation.navigate('Home', { screen: 'PostsScreen' }); //!--------------------------------------------
   };
 
   const keyboardIsHidden = () => {
@@ -154,7 +159,12 @@ const RegistrationScreen = () => {
                     <Text style={styles.buttonText}>Зареєстуватися</Text>
                   </TouchableOpacity>
                   <TouchableOpacity>
-                    <Text style={styles.footer}>Вже є акаунт? Увійти</Text>
+                    <Text
+                      style={styles.footer}
+                      onPress={() => navigation.navigate('LoginScreen')}
+                    >
+                      Вже є акаунт? Увійти
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </View>
