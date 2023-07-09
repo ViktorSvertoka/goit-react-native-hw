@@ -21,7 +21,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import Bg from '../image/bg-image.png';
 
 const LoginScreen = () => {
-  const navigation = useNavigation(); //!--------------------------------------------
+  const navigation = useNavigation();
 
   const [email, setEmail] = useState(''); // Стан для збереження введеної електронної пошти
   const [focusEmail, setIsFocusEmail] = useState(false); // Стан, що показує, чи є фокус на полі електронної пошти
@@ -62,7 +62,7 @@ const LoginScreen = () => {
     setPassword(''); // Очищення поля з паролем
     Keyboard.dismiss(); // Сховати клавіатуру
 
-    navigation.navigate('Home', { screen: 'PostsScreen' }); //!--------------------------------------------
+    navigation.navigate('Home', { screen: 'PostsScreen' });
   };
 
   const keyboardIsHidden = () => {
