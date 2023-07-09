@@ -1,7 +1,13 @@
-import { Text } from 'react-native';
+import React from 'react';
+
+import { BottomMenu } from '../components/BottomTab';
+
+import { useNavigation } from '@react-navigation/native';
 
 const Home = () => {
-  return <Text>Home</Text>;
+  const navigation = useNavigation();
+
+  return <BottomMenu navigation={navigation} />;
 };
 
 export default Home;
