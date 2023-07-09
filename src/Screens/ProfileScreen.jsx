@@ -10,28 +10,27 @@ import {
   ImageBackground,
   Dimensions,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native'; // Імпорт хука useNavigation з пакету @react-navigation/native
 
-import { useNavigation } from '@react-navigation/native';
+import Bg from '../image/bg-image.png'; // Імпорт зображення Bg з файлу image/bg-image.png
+import UserAvatarBig from '../image/userAvatarBig.jpg'; // Імпорт зображення UserAvatarBig з файлу image/userAvatarBig.jpg
+import Message from '../image/message.svg'; // Імпорт компонента Message з файлу image/message.svg
+import Like from '../image/like.svg'; // Імпорт компонента Like з файлу image/like.svg
+import Location from '../image/location.svg'; // Імпорт компонента Location з файлу image/location.svg
 
-import Bg from '../image/bg-image.png';
-import UserAvatarBig from '../image/userAvatarBig.jpg';
-import Message from '../image/message.svg';
-import Like from '../image/like.svg';
-import Location from '../image/location.svg';
-
-import { profilePostArray } from '../data/posts';
+import { profilePostArray } from '../data/posts'; // Імпорт масиву profilePostArray з файлу data/posts
 
 const ProfileScreen = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation(); // Навігація між екранами
 
   const [windowWidth, setWindowWidth] = useState(
     Dimensions.get('window').width
-  );
+  ); // Стан для збереження ширини вікна
   const [windowHeight, setWindowHeight] = useState(
     Dimensions.get('window').height
-  );
+  ); // Стан для збереження висоти вікна
 
-  const [posts, setPosts] = useState(profilePostArray);
+  const [posts, setPosts] = useState(profilePostArray); // Стан для збереження постів
 
   useEffect(() => {
     const onChange = () => {
@@ -40,20 +39,20 @@ const ProfileScreen = () => {
       const height = Dimensions.get('window').height;
       setWindowHeight(height);
     };
-    const dimensionsHandler = Dimensions.addEventListener('change', onChange);
+    const dimensionsHandler = Dimensions.addEventListener('change', onChange); // Додавання слухача на зміни розміру вікна
 
-    return () => dimensionsHandler.remove();
+    return () => dimensionsHandler.remove(); // Видалення слухача при виході з компонента
   }, []);
 
   useEffect(() => {
     async function prepare() {
-      await SplashScreen.preventAutoHideAsync();
+      await SplashScreen.preventAutoHideAsync(); // Попереднє запобігання автоматичного приховування SplashScreen
     }
     prepare();
   }, []);
 
   const onLayoutRootView = useCallback(async () => {
-    await SplashScreen.hideAsync();
+    await SplashScreen.hideAsync(); // Приховування SplashScreen
   }, []);
 
   return (
