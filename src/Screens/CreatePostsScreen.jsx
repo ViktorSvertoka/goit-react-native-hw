@@ -20,23 +20,24 @@ import AddPhoto from '../image/addPhoto.svg';
 import Delete from '../image/trash.svg';
 
 const CreatePostsScreen = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation(); // Навігація між екранами
 
   const [windowWidth, setWindowWidth] = useState(
-    Dimensions.get('window').width
+    Dimensions.get('window').width // Стан для збереження ширини вікна
   );
-  const [title, setTitle] = useState('');
-  const [isFocusedTitle, setIsFocusedTitle] = useState(false);
+  const [title, setTitle] = useState(''); // Стан для збереження значення поля "Назва"
+  const [isFocusedTitle, setIsFocusedTitle] = useState(false); // Стан для визначення активності поля "Назва"
 
-  const [location, setLocation] = useState('');
-  const [isFocusedLocation, setIsFocusedLocation] = useState(false);
+  const [location, setLocation] = useState(''); // Стан для збереження значення поля "Місцевість"
+  const [isFocusedLocation, setIsFocusedLocation] = useState(false); // Стан для визначення активності поля "Місцевість"
 
-  const [isDisabledPublish, setIsDisabledPublish] = useState(true);
-  const [isDelete, setIsDelete] = useState(true);
+  const [isDisabledPublish, setIsDisabledPublish] = useState(true); // Стан для визначення активності кнопки "Опубліковати"
+  const [isDelete, setIsDelete] = useState(true); // Стан для визначення активності кнопки "Видалити"
 
-  const titleHandler = title => setTitle(title);
-  const locationHandler = location => setLocation(location);
+  const titleHandler = title => setTitle(title); // Обробник для зміни значення поля "Назва"
+  const locationHandler = location => setLocation(location); // Обробник для зміни значення поля "Місцевість"
 
+  // Отримання ширини вікна після зміни його розміру
   useEffect(() => {
     const onChange = () => {
       const width = Dimensions.get('window').width;
@@ -47,16 +48,19 @@ const CreatePostsScreen = () => {
     return () => dimensionsHandler.remove();
   }, []);
 
+  // Перевірка, чи заповнені поля "Назва" і "Місцевість"
   useEffect(() => {
     title && location
       ? setIsDisabledPublish(false)
       : setIsDisabledPublish(true);
   }, [title, location]);
 
+  // Перевірка, чи не порожні поля "Назва" і "Місцевість"
   useEffect(() => {
     title || location ? setIsDelete(false) : setIsDelete(true);
   }, [title, location]);
 
+  // Обробник натискання кнопки "Опубліковати"
   const onPublish = () => {
     if (!title.trim() || !location.trim()) {
       Alert.alert(`Усі поля мають бути заповнені!`);
@@ -69,6 +73,7 @@ const CreatePostsScreen = () => {
     Keyboard.dismiss();
   };
 
+  // Обробник натискання кнопки "Видалити"
   const onDelete = () => {
     setTitle('');
     setLocation('');
@@ -76,6 +81,7 @@ const CreatePostsScreen = () => {
     Keyboard.dismiss();
   };
 
+  // Підготовка до відображення екрану
   useEffect(() => {
     async function prepare() {
       await SplashScreen.preventAutoHideAsync();
@@ -83,6 +89,7 @@ const CreatePostsScreen = () => {
     prepare();
   }, []);
 
+  // Приховання заставки після завантаження екрану
   const onLayoutRootView = useCallback(async () => {
     await SplashScreen.hideAsync();
   }, []);
