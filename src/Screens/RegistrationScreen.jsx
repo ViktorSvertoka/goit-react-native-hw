@@ -20,57 +20,67 @@ import Add from '../image/add.svg';
 import Bg from '../image/bg-image.png';
 
 const RegistrationScreen = () => {
-  const navigation = useNavigation(); //!--------------------------------------------
+  const navigation = useNavigation();
 
-  const [login, setLogin] = useState(''); // Стан для збереження значення поля "Логін"
-  const [focusLogin, setFocusLogin] = useState(false); // Стан для визначення активності поля "Логін"
+  const [login, setLogin] = useState('');
+  const [focusLogin, setFocusLogin] = useState(false);
 
-  const [email, setEmail] = useState(''); // Стан для збереження значення поля "Адреса електронної пошти"
-  const [focusEmail, setFocusEmail] = useState(false); // Стан для визначення активності поля "Адреса електронної пошти"
+  const [email, setEmail] = useState('');
+  const [focusEmail, setFocusEmail] = useState(false);
 
-  const [password, setPassword] = useState(''); // Стан для збереження значення поля "Пароль"
-  const [focusPassword, setFocusPassword] = useState(false); // Стан для визначення активності поля "Пароль"
-  const [isPasswordHidden, setIsPasswordHidden] = useState(true); // Стан для визначення видимості пароля
+  const [password, setPassword] = useState('');
+  const [focusPassword, setFocusPassword] = useState(false);
+  const [isPasswordHidden, setIsPasswordHidden] = useState(true);
 
-  const [phoneWidth, setPhoneWidth] = useState(Dimensions.get('window').width); // Стан для збереження ширини екрану
+  const [phoneWidth, setPhoneWidth] = useState(Dimensions.get('window').width);
   const [phoneHeight, setPhoneHeight] = useState(
     Dimensions.get('window').height
-  ); // Стан для збереження висоти екрану
+  );
 
   useEffect(() => {
     const onChange = () => {
-      const width = Dimensions.get('window').width; // Отримання ширини вікна
-      setPhoneWidth(width); // Оновлення значення ширини пристрою
+      const width = Dimensions.get('window').width;
+      setPhoneWidth(width);
 
-      const height = Dimensions.get('window').height; // Отримання висоти вікна
-      setPhoneHeight(height); // Оновлення значення висоти пристрою
+      const height = Dimensions.get('window').height;
+      setPhoneHeight(height);
     };
-    const addListener = Dimensions.addEventListener('change', onChange); // Додавання слухача на зміни розміру вікна
+    const addListener = Dimensions.addEventListener('change', onChange);
 
-    return () => addListener.remove(); // Видалення слухача при виході з компонента
+    return () => addListener.remove();
   }, []);
 
-  const loginSave = login => setLogin(login); // Функція для збереження значення поля "Логін"
-  const emailSave = email => setEmail(email); // Функція для збереження значення поля "Адреса електронної пошти"
-  const passwordSave = password => setPassword(password); // Функція для збереження значення поля "Пароль"
+  const loginSave = login => setLogin(login);
+  const emailSave = email => setEmail(email);
+  const passwordSave = password => setPassword(password);
+
+  const validateEmail = email => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   const onLogin = () => {
     if (!login.trim() || !email.trim() || !password.trim()) {
-      Alert.alert(`Усі поля мають бути заповнені!`); // Попередження, якщо не всі поля заповнені
+      Alert.alert(`Усі поля мають бути заповнені!`);
       return;
     }
-    Alert.alert(`${login}, успішно зареєстровані!`); // Повідомлення про успішну реєстрацію
-    console.log('login: ' + login, 'email: ' + email, 'password: ' + password); // Виведення значень полів "Логін", "Адреса електронної пошти" та "Пароль" у консоль
-    setLogin(''); // Скидання значення поля "Логін"
-    setEmail(''); // Скидання значення поля "Адреса електронної пошти"
-    setPassword(''); // Скидання значення поля "Пароль"
-    Keyboard.dismiss(); // Закриття клавіатури
+    if (!validateEmail(email)) {
+      Alert.alert(`Некоректна адреса електронної пошти!`);
+      return;
+    }
 
-    navigation.navigate('Home', { screen: 'PostsScreen' }); //!--------------------------------------------
+    Alert.alert(`${login}, успішно зареєстровані!`);
+    console.log('login: ' + login, 'email: ' + email, 'password: ' + password);
+    setLogin('');
+    setEmail('');
+    setPassword('');
+    Keyboard.dismiss();
+
+    navigation.navigate('Home', { screen: 'PostsScreen' });
   };
 
   const keyboardIsHidden = () => {
-    Keyboard.dismiss(); // Закриття клавіатури
+    Keyboard.dismiss();
   };
 
   return (
@@ -86,7 +96,6 @@ const RegistrationScreen = () => {
                 style={{
                   ...styles.containerWrapper,
                   width: phoneWidth,
-
                   marginTop: phoneWidth > 400 ? 200 : 300,
                 }}
               >
