@@ -10,13 +10,16 @@ import {
   ImageBackground,
   Dimensions,
 } from 'react-native';
+
+import { Feather, AntDesign } from '@expo/vector-icons';
+
 import { useNavigation } from '@react-navigation/native'; // Імпорт хука useNavigation з пакету @react-navigation/native
 
 import Bg from '../image/bg-image.png'; // Імпорт зображення Bg з файлу image/bg-image.png
 import UserAvatarBig from '../image/userAvatarBig.jpg'; // Імпорт зображення UserAvatarBig з файлу image/userAvatarBig.jpg
-import Message from '../image/message.svg'; // Імпорт компонента Message з файлу image/message.svg
-import Like from '../image/like.svg'; // Імпорт компонента Like з файлу image/like.svg
-import Location from '../image/location.svg'; // Імпорт компонента Location з файлу image/location.svg
+// import Message from '../image/message.svg'; // Імпорт компонента Message з файлу image/message.svg
+// import Like from '../image/like.svg'; // Імпорт компонента Like з файлу image/like.svg
+// import Location from '../image/location.svg'; // Імпорт компонента Location з файлу image/location.svg
 
 import { profilePostArray } from '../data/posts'; // Імпорт масиву profilePostArray з файлу data/posts
 
@@ -116,16 +119,19 @@ const ProfileScreen = () => {
                     style={styles.statisticWrap}
                     onPress={() => navigation.navigate('Коментарі')}
                   >
-                    <Message />
+                    <Feather name="message-circle" size={24} color="#FF6C00" />
+                    {/* <Message /> */}
                     <Text style={styles.statisticText}>{item.comments}</Text>
                   </TouchableOpacity>
                   <View style={{ ...styles.statisticWrap, marginLeft: 24 }}>
-                    <Like />
+                    <AntDesign name="like2" size={24} color="#FF6C00" />
+                    {/* <Like /> */}
                     <Text style={styles.statisticText}>{item.likes}</Text>
                   </View>
                 </View>
                 <View style={styles.statisticWrap}>
-                  <Location />
+                  <AntDesign name="enviromento" size={24} color="#BDBDBD" />
+                  {/* <Location /> */}
                   <Text style={styles.statisticText}>{item.location}</Text>
                 </View>
               </View>

@@ -8,11 +8,13 @@ import ProfileScreen from '../Screens/ProfileScreen';
 
 import { useNavigation } from '@react-navigation/native';
 
-import Left from '../image/left.svg';
-import Grid from '../image/grid.svg';
-import User from '../image/user.svg';
-import Plus from '../image/plus.svg';
-import Logout from '../image/logout.svg';
+import { FontAwesome5, AntDesign, Ionicons, Feather } from '@expo/vector-icons';
+
+// import Left from '../image/left.svg';
+// import Grid from '../image/grid.svg';
+// import User from '../image/user.svg';
+// import Plus from '../image/plus.svg';
+// import Logout from '../image/logout.svg';
 
 const BottomTab = createBottomTabNavigator();
 
@@ -46,17 +48,25 @@ export const BottomMenu = () => {
                 borderRadius: 20,
               }}
             >
-              <Grid
+              <Ionicons
+                name="grid-outline"
                 size={size}
                 color={color}
                 strokeOpacity={0.8}
                 stroke={focused ? '#FFFFFF' : '#212121'}
               />
+              {/* <Grid
+                size={size}
+                color={color}
+                strokeOpacity={0.8}
+                stroke={focused ? '#FFFFFF' : '#212121'}
+              /> */}
             </View>
           ),
           headerRight: ({ focused, size, color }) => (
             <TouchableOpacity>
-              <Logout size={size} color={color} />
+              <Feather name="log-out" size={size} color={color} />
+              {/* <Logout size={size} color={color} /> */}
             </TouchableOpacity>
           ),
         }}
@@ -77,17 +87,25 @@ export const BottomMenu = () => {
                 borderRadius: 20,
               }}
             >
-              <Plus
+              <AntDesign
+                name="plus"
                 size={size}
                 color={color}
                 fillOpacity={0.8}
                 fill={focused ? '#FFFFFF' : '#212121'}
               />
+              {/* <Plus
+                size={size}
+                color={color}
+                fillOpacity={0.8}
+                fill={focused ? '#FFFFFF' : '#212121'}
+              /> */}
             </View>
           ),
           headerLeft: ({ focused, size, color }) => (
             <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Left size={size} color={color} />
+              <AntDesign name="arrowleft" size={size} color={color} />
+              {/* <Left size={size} color={color} /> */}
             </TouchableOpacity>
           ),
         }}
@@ -108,11 +126,17 @@ export const BottomMenu = () => {
                 borderRadius: 20,
               }}
             >
-              <User
+              <Feather
+                name="user"
                 size={size}
                 color={color}
                 stroke={focused ? '#FFFFFF' : '#212121'}
               />
+              {/* <User
+                size={size}
+                color={color}
+                stroke={focused ? '#FFFFFF' : '#212121'}
+              /> */}
             </View>
           ),
         }}

@@ -13,11 +13,13 @@ import {
   Dimensions,
 } from 'react-native';
 
+import { EvilIcons, AntDesign, FontAwesome } from '@expo/vector-icons';
+
 import { useNavigation } from '@react-navigation/native';
 
-import Location from '../image/location.svg';
-import AddPhoto from '../image/addPhoto.svg';
-import Delete from '../image/trash.svg';
+// import Location from '../image/location.svg';
+// import AddPhoto from '../image/addPhoto.svg';
+// import Delete from '../image/trash.svg';
 
 const CreatePostsScreen = () => {
   const navigation = useNavigation(); // Навігація між екранами
@@ -104,7 +106,8 @@ const CreatePostsScreen = () => {
         <View style={styles.section}>
           <View style={{ ...styles.contentSection, width: windowWidth - 30 }}>
             <TouchableOpacity>
-              <AddPhoto />
+              {/* <AddPhoto /> */}
+              <FontAwesome name="camera" size={24} color="gray" />
             </TouchableOpacity>
           </View>
           <View style={styles.contentTitle}>
@@ -139,8 +142,11 @@ const CreatePostsScreen = () => {
               placeholderTextColor={'#BDBDBD'}
               onChangeText={locationHandler}
               onPressIn={() => navigation.navigate('Map')}
-            ></TextInput>
-            <Location style={styles.locationIcon} />
+            >
+              <AntDesign name="enviromento" size={24} color="#BDBDBD" />
+            </TextInput>
+
+            {/* <Location style={styles.locationIcon} /> */}
           </View>
           <TouchableOpacity
             style={{
@@ -166,7 +172,8 @@ const CreatePostsScreen = () => {
             }}
             onPress={onDelete}
           >
-            <Delete stroke={isDelete ? '#BDBDBD' : '#FFFFFF'} />
+            <EvilIcons name="trash" size={24} color="black" />
+            {/* <Delete stroke={isDelete ? '#BDBDBD' : '#FFFFFF'} /> */}
           </TouchableOpacity>
         </View>
       </ScrollView>

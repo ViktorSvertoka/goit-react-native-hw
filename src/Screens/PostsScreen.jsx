@@ -11,12 +11,14 @@ import {
   FlatList,
 } from 'react-native';
 
+import { Feather, AntDesign } from '@expo/vector-icons';
+
 import { postsScreenArray } from '../data/posts'; // Імпорт масиву postsScreenArray з файлу data/posts
 
 import UserAvatar from '../image/userAvatar.jpg'; // Імпорт зображення UserAvatar з файлу image/userAvatar.jpg
-import Message from '../image/message.svg'; // Імпорт компонента Message з файлу image/message.svg
-import Like from '../image/like.svg'; // Імпорт компонента Like з файлу image/like.svg
-import Location from '../image/location.svg'; // Імпорт компонента Location з файлу image/location.svg
+// import Message from '../image/message.svg'; // Імпорт компонента Message з файлу image/message.svg
+// import Like from '../image/like.svg'; // Імпорт компонента Like з файлу image/like.svg
+// import Location from '../image/location.svg'; // Імпорт компонента Location з файлу image/location.svg
 
 const PostsScreen = () => {
   const navigation = useNavigation(); // Навігація між екранами
@@ -77,16 +79,19 @@ const PostsScreen = () => {
                   style={styles.wrap}
                   onPress={() => navigation.navigate('Коментарі')}
                 >
-                  <Message />
+                  <Feather name="message-circle" size={24} color="#FF6C00" />
+                  {/* <Message /> */}
                   <Text style={styles.textStatistic}>{item.comments}</Text>
                 </TouchableOpacity>
                 <View style={{ ...styles.wrap, marginLeft: 24 }}>
-                  <Like />
+                  <AntDesign name="like2" size={24} color="#FF6C00" />
+                  {/* <Like /> */}
                   <Text style={styles.textStatistic}>{item.likes}</Text>
                 </View>
               </View>
               <View style={styles.wrap}>
-                <Location />
+                <AntDesign name="enviromento" size={24} color="#BDBDBD" />
+                {/* <Location /> */}
                 <Text style={styles.textStatistic}>{item.location}</Text>
               </View>
             </View>
