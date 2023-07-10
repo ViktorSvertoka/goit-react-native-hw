@@ -16,7 +16,9 @@ import {
   Dimensions,
 } from 'react-native';
 
-import Add from '../image/add.svg';
+import { Octicons } from '@expo/vector-icons';
+
+// import Add from '../image/add.svg';
 import Bg from '../image/bg-image.png';
 
 const RegistrationScreen = () => {
@@ -113,7 +115,8 @@ const RegistrationScreen = () => {
                     right: phoneWidth / 2 - 70,
                   }}
                 >
-                  <Add />
+                  <Octicons name="plus-circle" size={25} color="#FF6C00" />
+                  {/* <Add /> */}
                 </TouchableOpacity>
                 <View style={{ width: phoneWidth - 16 * 2 }}>
                   <Text style={styles.title}>Реєстрація</Text>
