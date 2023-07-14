@@ -81,7 +81,7 @@ export const BottomMenu = () => {
               style={{
                 justifyContent: 'center',
                 alignItems: 'center',
-                // backgroundColor: focused ? '#FF6C00' : '#FFFFFF',
+                backgroundColor: '#FF6C00',
                 width: 70,
                 height: 40,
                 borderRadius: 20,
@@ -90,9 +90,9 @@ export const BottomMenu = () => {
               <AntDesign
                 name="plus"
                 size={size}
-                color={color}
+                color={'#FFFFFF'}
                 fillOpacity={0.8}
-                fill={focused ? '#FFFFFF' : '#212121'}
+                fill={'#FFFFFF'}
               />
               {/* <Plus
                 size={size}
@@ -120,7 +120,7 @@ export const BottomMenu = () => {
               style={{
                 justifyContent: 'center',
                 alignItems: 'center',
-                backgroundColor: focused ? '#FF6C00' : '#FFFFFF',
+                // backgroundColor: focused ? '#FF6C00' : '#FFFFFF',
                 width: 70,
                 height: 40,
                 borderRadius: 20,
@@ -129,7 +129,7 @@ export const BottomMenu = () => {
               <Feather
                 name="user"
                 size={size}
-                color={color}
+                color={'#212121'}
                 stroke={focused ? '#FFFFFF' : '#212121'}
               />
               {/* <User
