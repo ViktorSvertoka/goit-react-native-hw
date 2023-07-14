@@ -42,7 +42,7 @@ export const BottomMenu = () => {
               style={{
                 justifyContent: 'center',
                 alignItems: 'center',
-                backgroundColor: focused ? '#FF6C00' : '#FFFFFF',
+                // backgroundColor: focused ? '#FF6C00' : '#FFFFFF',
                 width: 70,
                 height: 40,
                 borderRadius: 20,
@@ -50,10 +50,10 @@ export const BottomMenu = () => {
             >
               <Ionicons
                 name="grid-outline"
-                size={size}
-                color={color}
+                size={20}
+                color={'#212121'}
                 strokeOpacity={0.8}
-                stroke={focused ? '#FFFFFF' : '#212121'}
+                // stroke={focused ? '#FFFFFF' : '#212121'}
               />
               {/* <Grid
                 size={size}
@@ -81,7 +81,7 @@ export const BottomMenu = () => {
               style={{
                 justifyContent: 'center',
                 alignItems: 'center',
-                backgroundColor: focused ? '#FF6C00' : '#FFFFFF',
+                // backgroundColor: focused ? '#FF6C00' : '#FFFFFF',
                 width: 70,
                 height: 40,
                 borderRadius: 20,
