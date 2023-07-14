@@ -105,7 +105,7 @@ const CreatePostsScreen = () => {
       <ScrollView>
         <View style={styles.section}>
           <View style={{ ...styles.contentSection, width: windowWidth - 30 }}>
-            <TouchableOpacity>
+            <TouchableOpacity style={styles.postImgAdd} activeOpacity={0.5}>
               {/* <AddPhoto /> */}
               <FontAwesome name="camera" size={24} color="gray" />
             </TouchableOpacity>
@@ -186,6 +186,10 @@ export default CreatePostsScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+
+    justifyContent: 'center',
+    alignItems: 'center',
+
     backgroundColor: '#FFFFFF',
   },
 
@@ -250,5 +254,13 @@ const styles = StyleSheet.create({
     width: 70,
     height: 40,
     borderRadius: 20,
+  },
+  postImg: {
+    flex: 2,
+    width: '80%',
+    height: '40%',
+    color: '#F6F6F6',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
