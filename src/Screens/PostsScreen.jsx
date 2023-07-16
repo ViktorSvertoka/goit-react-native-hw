@@ -16,9 +16,6 @@ import { Feather, AntDesign } from '@expo/vector-icons';
 import { postsScreenArray } from '../data/posts'; // Імпорт масиву postsScreenArray з файлу data/posts
 
 import UserAvatar from '../image/userAvatar.jpg'; // Імпорт зображення UserAvatar з файлу image/userAvatar.jpg
-// import Message from '../image/message.svg'; // Імпорт компонента Message з файлу image/message.svg
-// import Like from '../image/like.svg'; // Імпорт компонента Like з файлу image/like.svg
-// import Location from '../image/location.svg'; // Імпорт компонента Location з файлу image/location.svg
 
 const PostsScreen = () => {
   const navigation = useNavigation(); // Навігація між екранами
