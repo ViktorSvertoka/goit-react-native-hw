@@ -17,9 +17,6 @@ import { useNavigation } from '@react-navigation/native'; // Імпорт хук
 
 import Bg from '../image/bg-image.png'; // Імпорт зображення Bg з файлу image/bg-image.png
 import UserAvatarBig from '../image/userAvatarBig.jpg'; // Імпорт зображення UserAvatarBig з файлу image/userAvatarBig.jpg
-// import Message from '../image/message.svg'; // Імпорт компонента Message з файлу image/message.svg
-// import Like from '../image/like.svg'; // Імпорт компонента Like з файлу image/like.svg
-// import Location from '../image/location.svg'; // Імпорт компонента Location з файлу image/location.svg
 
 import { profilePostArray } from '../data/posts'; // Імпорт масиву profilePostArray з файлу data/posts
 
