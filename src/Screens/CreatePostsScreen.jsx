@@ -1,4 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import * as ImagePicker from 'expo-image-picker';
+import * as Location from 'expo-location';
+import { FontAwesome, EvilIcons, Ionicons } from '@expo/vector-icons';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { StyleSheet } from 'react-native';
 import {
   View,
   Text,
@@ -10,13 +16,9 @@ import {
   Keyboard,
   Platform,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+
 import { Camera } from 'expo-camera';
-import * as ImagePicker from 'expo-image-picker';
-import * as Location from 'expo-location';
-import { FontAwesome, EvilIcons, Ionicons } from '@expo/vector-icons';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { StyleSheet } from 'react-native';
+
 import posts from '../data/posts';
 
 // Створення навігації в нижній частині екрану
@@ -40,7 +42,7 @@ const CreatePost = () => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
-        console.log('Permission to access location was denied');
+        console.log('У доступі до місцезнаходження відмовлено');
       }
 
       let location = await Location.getCurrentPositionAsync({});
@@ -73,7 +75,7 @@ const CreatePost = () => {
     return <View />;
   }
   if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
+    return <Text>Немає доступу до камери</Text>;
   }
 
   // Функція для очищення даних після створення публікації
