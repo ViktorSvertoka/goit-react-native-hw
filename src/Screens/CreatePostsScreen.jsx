@@ -1,266 +1,311 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import * as SplashScreen from 'expo-splash-screen';
+import React, { useState, useEffect, useRef } from 'react';
 import {
-  Alert,
-  Keyboard,
-  ScrollView,
-  StyleSheet,
   View,
-  TextInput,
-  KeyboardAvoidingView,
   Text,
   TouchableOpacity,
-  Dimensions,
+  Image,
+  TextInput,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Platform,
 } from 'react-native';
-
-import { EvilIcons, AntDesign, FontAwesome } from '@expo/vector-icons';
-
 import { useNavigation } from '@react-navigation/native';
+import { Camera } from 'expo-camera';
+import * as ImagePicker from 'expo-image-picker';
+import * as Location from 'expo-location';
+import { FontAwesome, EvilIcons, Ionicons } from '@expo/vector-icons';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { StyleSheet } from 'react-native';
+import posts from '../data/posts';
 
-// import Location from '../image/location.svg';
-// import AddPhoto from '../image/addPhoto.svg';
-// import Delete from '../image/trash.svg';
+// Створення навігації в нижній частині екрану
+const BottomTabs = createBottomTabNavigator();
 
-const CreatePostsScreen = () => {
-  const navigation = useNavigation(); // Навігація між екранами
+// Компонент для створення публікації
+const CreatePost = () => {
+  // Використання хука useNavigation для навігації між екранами
+  const navigation = useNavigation();
 
-  const [windowWidth, setWindowWidth] = useState(
-    Dimensions.get('window').width // Стан для збереження ширини вікна
-  );
-  const [title, setTitle] = useState(''); // Стан для збереження значення поля "Назва"
-  const [isFocusedTitle, setIsFocusedTitle] = useState(false); // Стан для визначення активності поля "Назва"
+  // Створення станів за допомогою useState хука
+  const [postPhoto, setPostPhoto] = useState(null); // Збереження URL фотографії для публікації
+  const [photoName, setPhotoName] = useState(''); // Збереження назви фотографії
+  const [photoLocationName, setPhotoLocationName] = useState(''); // Збереження місцевості фотографії
+  const [hasPermission, setHasPermission] = useState(null); // Дозвіл на використання камери
+  const [currentGeoLocation, setCurrentGeoLocation] = useState({}); // Поточна геолокація
+  const cameraRef = useRef(null); // Посилання на об'єкт камери
 
-  const [location, setLocation] = useState(''); // Стан для збереження значення поля "Місцевість"
-  const [isFocusedLocation, setIsFocusedLocation] = useState(false); // Стан для визначення активності поля "Місцевість"
-
-  const [isDisabledPublish, setIsDisabledPublish] = useState(true); // Стан для визначення активності кнопки "Опубліковати"
-  const [isDelete, setIsDelete] = useState(true); // Стан для визначення активності кнопки "Видалити"
-
-  const titleHandler = title => setTitle(title); // Обробник для зміни значення поля "Назва"
-  const locationHandler = location => setLocation(location); // Обробник для зміни значення поля "Місцевість"
-
-  // Отримання ширини вікна після зміни його розміру
+  // Використання useEffect хука для отримання поточної геолокації
   useEffect(() => {
-    const onChange = () => {
-      const width = Dimensions.get('window').width;
-      setWindowWidth(width);
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        console.log('Permission to access location was denied');
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      const coords = {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      };
+      setCurrentGeoLocation(coords);
+    })();
+  }, []);
+
+  // Використання useEffect хука для отримання дозволу на використання камери
+  useEffect(() => {
+    (async () => {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      setHasPermission(status === 'granted');
+    })();
+  }, []);
+
+  // Функція для зйомки фотографії за допомогою камери
+  const makePhoto = async () => {
+    if (cameraRef.current) {
+      const { uri } = await cameraRef.current.takePictureAsync();
+      setPostPhoto(uri);
+    }
+  };
+
+  // Умовна конструкція для відображення компонентів залежно від наявності дозволу на використання камери
+  if (hasPermission === null) {
+    return <View />;
+  }
+  if (hasPermission === false) {
+    return <Text>No access to camera</Text>;
+  }
+
+  // Функція для очищення даних після створення публікації
+  const clearData = () => {
+    setPostPhoto(null);
+    setPhotoName('');
+    setPhotoLocationName('');
+  };
+
+  // Функція для завантаження фотографії з галереї пристрою
+  const uploadPhoto = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) setPostPhoto(result.assets[0].uri);
+  };
+
+  // Функція для обробки натискання кнопки "Опубліковати"
+  const handleSubmit = () => {
+    const data = {
+      img: postPhoto,
+      description: photoName,
+      comments: [],
+      likes: 0,
+      locationName: photoLocationName,
+      geoLocation: currentGeoLocation,
     };
-    const dimensionsHandler = Dimensions.addEventListener('change', onChange);
-
-    return () => dimensionsHandler.remove();
-  }, []);
-
-  // Перевірка, чи заповнені поля "Назва" і "Місцевість"
-  useEffect(() => {
-    title && location
-      ? setIsDisabledPublish(false)
-      : setIsDisabledPublish(true);
-  }, [title, location]);
-
-  // Перевірка, чи не порожні поля "Назва" і "Місцевість"
-  useEffect(() => {
-    title || location ? setIsDelete(false) : setIsDelete(true);
-  }, [title, location]);
-
-  // Обробник натискання кнопки "Опубліковати"
-  const onPublish = () => {
-    if (!title.trim() || !location.trim()) {
-      Alert.alert(`Усі поля мають бути заповнені!`);
-      return;
-    }
-    Alert.alert(`Пост успішно було створено.`);
-    console.log(title, location);
-    setTitle('');
-    setLocation('');
-    Keyboard.dismiss();
+    posts.unshift(data); // Додавання нової публікації до списку постів
+    clearData(); // Очищення даних після створення публікації
+    navigation.navigate('PostsScreen'); // Перехід на екран постів
   };
 
-  // Обробник натискання кнопки "Видалити"
-  const onDelete = () => {
-    setTitle('');
-    setLocation('');
-    Alert.alert(`Вилучення пройшло успішно.`);
-    Keyboard.dismiss();
-  };
-
-  // Підготовка до відображення екрану
-  useEffect(() => {
-    async function prepare() {
-      await SplashScreen.preventAutoHideAsync();
-    }
-    prepare();
-  }, []);
-
-  // Приховання заставки після завантаження екрану
-  const onLayoutRootView = useCallback(async () => {
-    await SplashScreen.hideAsync();
-  }, []);
-
+  // Відображення компонентів для створення публікації
   return (
-    <KeyboardAvoidingView
-      onLayout={onLayoutRootView}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}
-    >
-      <ScrollView>
-        <View style={styles.section}>
-          <View style={{ ...styles.contentSection, width: windowWidth - 30 }}>
-            <TouchableOpacity style={styles.postImgAdd} activeOpacity={0.5}>
-              {/* <AddPhoto /> */}
-              <FontAwesome name="camera" size={24} color="gray" />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.contentTitle}>
-            <Text style={styles.text}>Завантажте фото</Text>
-          </View>
-          <View style={{ width: windowWidth - 32 }}>
-            <TextInput
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+      >
+        <View style={styles.container}>
+          {postPhoto ? (
+            <Image
+              source={{ uri: postPhoto }}
               style={{
-                ...styles.input,
-                borderColor: isFocusedTitle ? '#FF6C00' : '#E8E8E8',
+                width: '95%',
+                height: 240,
+                borderRadius: 8,
               }}
-              onFocus={() => setIsFocusedTitle(true)}
-              onBlur={() => setIsFocusedTitle(false)}
-              value={title}
-              placeholder="Назва..."
-              cursorColor={'#BDBDBD'}
-              placeholderTextColor={'#BDBDBD'}
-              onChangeText={titleHandler}
-            ></TextInput>
-            <TextInput
-              style={{
-                ...styles.input,
-                borderColor: isFocusedLocation ? '#FF6C00' : '#E8E8E8',
-                paddingLeft: 25,
-              }}
-              onFocus={() => setIsFocusedLocation(true)}
-              onBlur={() => setIsFocusedLocation(false)}
-              value={location}
-              textContentType={'location'}
-              placeholder="Місцевість..."
-              cursorColor={'#BDBDBD'}
-              placeholderTextColor={'#BDBDBD'}
-              onChangeText={locationHandler}
-              onPressIn={() => navigation.navigate('Map')}
+            />
+          ) : (
+            <Camera
+              style={styles.camera}
+              type={Camera.Constants.Type.back}
+              ref={cameraRef}
             >
-              <AntDesign name="enviromento" size={24} color="#BDBDBD" />
-            </TextInput>
-
-            {/* <Location style={styles.locationIcon} /> */}
-          </View>
-          <TouchableOpacity
-            style={{
-              ...styles.button,
-              width: windowWidth - 32,
-              backgroundColor: isDisabledPublish ? '#F6F6F6' : '#FF6C00',
-            }}
-            onPress={onPublish}
-          >
-            <Text
-              style={{
-                ...styles.textButton,
-                color: isDisabledPublish ? '#BDBDBD' : '#FFFFFF',
-              }}
-            >
-              Опубліковати
+              <TouchableOpacity
+                style={styles.imageAddButton}
+                opacity={0.5}
+                onPress={makePhoto}
+              >
+                <FontAwesome name="camera" size={24} color="gray" />
+              </TouchableOpacity>
+            </Camera>
+          )}
+          <TouchableOpacity onPress={uploadPhoto}>
+            <Text style={styles.imageText}>
+              {postPhoto ? 'Редагувати фото' : 'Завантажте фото'}
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              ...styles.deleteImg,
-              backgroundColor: isDelete ? '#F6F6F6' : '#FF6C00',
-            }}
-            onPress={onDelete}
-          >
-            <EvilIcons name="trash" size={24} color="black" />
-            {/* <Delete stroke={isDelete ? '#BDBDBD' : '#FFFFFF'} /> */}
-          </TouchableOpacity>
+          <View style={styles.formContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Назва..."
+              type={'text'}
+              name={'photoName'}
+              value={photoName}
+              onChangeText={setPhotoName}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Місцевість..."
+              type={'text'}
+              name={'photoLocation'}
+              value={photoLocationName}
+              onChangeText={setPhotoLocationName}
+            />
+            <TouchableOpacity
+              style={[
+                styles.button,
+                postPhoto
+                  ? {
+                      color: '#FFFFFF',
+                      backgroundColor: '#FF6C00',
+                    }
+                  : {
+                      color: '#BDBDBD',
+                      backgroundColor: '#F6F6F6',
+                    },
+              ]}
+              activeOpacity={0.5}
+              onPress={handleSubmit}
+            >
+              <Text
+                style={[
+                  styles.buttonText,
+                  postPhoto
+                    ? {
+                        color: '#FFFFFF',
+                      }
+                    : {
+                        color: '#BDBDBD',
+                      },
+                ]}
+              >
+                Опубліковати
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 };
 
-export default CreatePostsScreen;
+// Компонент, що містить навігацію для створення публікації
+const CreatePostsScreen = () => {
+  const navigation = useNavigation();
+
+  return (
+    <BottomTabs.Navigator
+      screenOptions={{
+        tabBarShowLabel: false,
+        tabBarStyle: {
+          height: 80,
+          borderBottomColor: '#E8E8E8',
+          borderBottomWidth: 2,
+        },
+      }}
+    >
+      <BottomTabs.Screen
+        options={{
+          tabBarIcon: () => (
+            <TouchableOpacity style={styles.trashButton} activeOpacity={0.5}>
+              <EvilIcons name="trash" size={24} color="black" />
+            </TouchableOpacity>
+          ),
+          headerLeft: () => (
+            <TouchableOpacity
+              style={styles.logoutButton}
+              activeOpacity={0.5}
+              onPress={() =>
+                navigation.navigate('Home', { screen: 'PostsScreen' })
+              }
+            >
+              <Ionicons name="arrow-back-sharp" size={24} color="black" />
+            </TouchableOpacity>
+          ),
+          headerLeftContainerStyle: { paddingLeft: 10 },
+          headerTitleAlign: 'center',
+          headerTitleStyle: { paddingBottom: 5 },
+        }}
+        name="Створити публікацію"
+        component={CreatePost}
+      />
+    </BottomTabs.Navigator>
+  );
+};
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-
-    justifyContent: 'center',
-    alignItems: 'center',
-
-    backgroundColor: '#FFFFFF',
-  },
-
-  section: {
-    alignItems: 'center',
-    marginTop: 32,
-    paddingHorizontal: 16,
-  },
-  contentSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 240,
+  trashButton: {
     backgroundColor: '#F6F6F6',
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderRadius: 8,
-    borderColor: '#E8E8E8',
-  },
-  contentTitle: {
-    width: '100%',
-
-    alignItems: 'flex-start',
-  },
-  text: {
-    marginTop: 8,
-    marginBottom: 16,
-    color: '#BDBDBD',
-    fontSize: 16,
-    lineHeight: 19,
-  },
-  input: {
-    marginTop: 16,
-    paddingTop: 0,
-    paddingBottom: 0,
-    height: 56,
-    borderBottomWidth: 1,
-    borderStyle: 'solid',
-    borderColor: '#E8E8E8',
-    fontSize: 16,
-    lineHeight: 19,
-    color: '#212121',
-  },
-  locationIcon: {
-    position: 'absolute',
-    bottom: 16,
-  },
-  button: {
     height: 40,
-    marginTop: 30,
-    paddingVertical: 10,
-    borderRadius: 100,
-  },
-  textButton: {
-    fontSize: 16,
-    lineHeight: 19,
-    textAlign: 'center',
-  },
-  deleteImg: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 80,
     width: 70,
-    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: 20,
   },
-  postImg: {
-    flex: 2,
-    width: '80%',
-    height: '40%',
-    color: '#F6F6F6',
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+  camera: {
+    width: '92%',
+    height: 240,
+    borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
   },
+  imageAddButton: {
+    width: 60,
+    height: 60,
+    borderRadius: 100,
+    backgroundColor: '#FFFFFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imageText: {
+    color: '#BDBDBD',
+    fontWeight: '400',
+    fontSize: 16,
+    lineHeight: 19,
+    marginTop: 16,
+  },
+  formContainer: {
+    flex: 3,
+  },
+  button: {
+    height: 50,
+    width: 343,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 100,
+    marginTop: 44,
+  },
+  buttonText: {
+    fontWeight: '400',
+  },
+  input: {
+    width: 340,
+    height: 50,
+    marginTop: 33,
+    padding: 16,
+    fontStyle: 'normal',
+    fontWeight: '400',
+    fontSize: 16,
+    borderBottomColor: '#E8E8E8',
+    borderBottomWidth: 2,
+  },
 });
+
+export default CreatePostsScreen;
