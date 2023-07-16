@@ -18,7 +18,6 @@ import {
 
 import { Octicons } from '@expo/vector-icons';
 
-// import Add from '../image/add.svg';
 import Bg from '../image/bg-image.png';
 
 const RegistrationScreen = () => {
