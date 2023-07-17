@@ -1,25 +1,8 @@
-const { getDefaultConfig } = require('metro-config');
+// Learn more https://docs.expo.io/guides/customizing-metro
 
-module.exports = (async () => {
-  const {
-    resolver: { sourceExts, assetExts },
-  } = await getDefaultConfig();
-  return {
-    transformer: {
-      babelTransformerPath: require.resolve('react-native-svg-transformer'),
-    },
-    resolver: {
-      assetExts: assetExts.filter(ext => ext !== 'svg'),
-      sourceExts: [...sourceExts, 'svg'],
-    },
-  };
-})();
+const { getDefaultConfig } = require('@expo/metro-config');
 
-// https://github.com/kristerkari/react-native-svg-transformer#step-3-configure-the-react-native-packager
+const defaultConfig = getDefaultConfig(__dirname);
+defaultConfig.resolver.assetExts.push('cjs');
 
-// For React Native v0.59 or newer
-// Merge the contents from your project's metro.config.js file with this config (create the file if it does not exist already).
-
-// metro.config.js:
-
-// https://www.npmjs.com/package/react-native-svg-transformer
+module.exports = defaultConfig;
