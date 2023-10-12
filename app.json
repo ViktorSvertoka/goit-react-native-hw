@@ -11,9 +11,14 @@
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff",
-      "permissions": ["CAMERA", "LOCATION"]
+      "permissions": [
+        "CAMERA",
+        "LOCATION"
+      ]
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "y"
@@ -24,15 +29,16 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": ""
+      "package": "com.viktor_svertoka.goitreactnativehw"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "137e7801-ad4f-49fb-88f3-7f06d28fb717"
+        "projectId": "502863e7-7878-4d03-9825-21b864471ec3"
       }
-    }
+    },
+    "owner": "viktor_svertoka"
   }
 }

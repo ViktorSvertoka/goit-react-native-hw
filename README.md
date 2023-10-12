@@ -168,3 +168,5 @@
 ![react-native](./assets/2.jpg)
 
 `npx expo start`
+
+https://expo.dev/accounts/viktor_svertoka/projects/goit-react-native-hw/builds/75ab30c2-ba94-44f2-acfa-58c443b1656e
