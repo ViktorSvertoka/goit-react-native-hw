@@ -1,4 +1,4 @@
-![react-native](./react-native-logo.png)
+![react-native](./assets/react-native-logo.png)
 
 ---
 
