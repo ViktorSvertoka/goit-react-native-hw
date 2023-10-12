@@ -1,7 +1,5 @@
 ![react-native](./assets/react-native-logo.png)
 
----
-
 # goit-react-native-hw
 
 ## ДЗ №1
@@ -164,5 +162,9 @@
 ### Завдання​
 
 1. Викласти проект на сервери expo
+
+![react-native](./assets/1.jpg)
+
+![react-native](./assets/2.jpg)
 
 `npx expo start`
