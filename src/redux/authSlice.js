@@ -1,11 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const state = {
-  userId: null,
-  login: null,
+  name: null,
   email: null,
+  avatar: null,
+  userId: null,
   stateChange: false,
-  avatarImage: null,
 };
 
 export const authSlice = createSlice({
@@ -14,15 +14,19 @@ export const authSlice = createSlice({
   reducers: {
     updateUserProfile: (state, { payload }) => ({
       ...state,
-      userId: payload.userId,
-      login: payload.login,
-      avatarImage: payload.avatarImage,
+      name: payload.name,
       email: payload.email,
+      userId: payload.userId,
+      avatar: payload.avatar,
     }),
     authStateChange: (state, { payload }) => ({
       ...state,
       stateChange: payload.stateChange,
     }),
-    authSignOut: () => state,
+    authLogOut: () => state,
   },
 });
+
+export const authReducer = authSlice.reducer;
+export const { updateUserProfile, authStateChange, authLogOut } =
+  authSlice.actions;

@@ -1,42 +1,52 @@
 import 'react-native-gesture-handler';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { useFonts } from 'expo-font';
+import React, { useCallback, useEffect, useState } from 'react';
+import { ActivityIndicator, View } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import * as SplashScreen from 'expo-splash-screen';
+import * as Font from 'expo-font';
+import { Provider } from 'react-redux';
 
-import LoginScreen from './src/Screens/LoginScreen';
-import RegistrationScreen from './src/Screens/RegistrationScreen';
-import Home from './src/Screens/Home';
-import CreatePostsScreen from './src/Screens/CreatePostsScreen';
-import ProfileScreen from './src/Screens/ProfileScreen';
+import { store } from './src/redux/store';
+import Main from './src/components/Main/Main';
 
 export default function App() {
-  const [fontsLoaded] = useFonts({
-    RobotoBold: require('./src/fonts/Roboto-Bold.ttf'), // Завантаження шрифту Roboto-Bold
-    RobotoRegular: require('./src/fonts/Roboto-Regular.ttf'), // Завантаження шрифту Roboto-Regular
-    RobotoMedium: require('./src/fonts/Roboto-Medium.ttf'), // Завантаження шрифту Roboto-Medium
+  const [appIsReady, setAppIsReady] = useState(false);
+
+  useEffect(() => {
+    async function prepare() {
+      try {
+        await Font.loadAsync({
+          'Roboto-Regular': require('./src/fonts/Roboto-Regular.ttf'),
+          'Roboto-Medium': require('./src/fonts/Roboto-Medium.ttf'),
+          'Roboto-Bold': require('./src/fonts/Roboto-Bold.ttf'),
+        });
+      } catch (error) {
+        console.warn('Error loading assets:', error);
+      } finally {
+        setAppIsReady(true);
+      }
+    }
+    prepare();
+  }, []);
+
+  const onLayoutRootView = useCallback(async () => {
+    if (appIsReady) {
+      await SplashScreen.hideAsync();
+    }
   });
 
-  if (!fontsLoaded) {
-    return null;
+  if (!appIsReady) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
   }
 
-  const Stack = createStackNavigator();
-
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="LoginScreen"
-        screenOptions={{ headerShown: false }}
-      >
-        <Stack.Screen
-          name="RegistrationScreen"
-          component={RegistrationScreen}
-        />
-        <Stack.Screen name="LoginScreen" component={LoginScreen} />
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="CreatePostsScreen" component={CreatePostsScreen} />
-        <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <StatusBar style="auto" />
+      <Main onLayout={onLayoutRootView} />
+    </Provider>
   );
 }

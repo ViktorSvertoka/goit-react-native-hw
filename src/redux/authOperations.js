@@ -1,78 +1,103 @@
+import { auth } from '../firebase/config';
 import {
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  updateProfile,
   onAuthStateChanged,
+  signInWithEmailAndPassword,
   signOut,
+  updateProfile,
 } from 'firebase/auth';
+import { authLogOut, authStateChange, updateUserProfile } from './authSlice';
 
-import { Alert } from 'react-native';
-
-import { auth } from '../firebase/config';
-
-import { authSlice } from './authSlice';
-
-const { updateUserProfile, authStateChange, authSignOut } = authSlice.actions;
-
-export const authSignUpUser =
-  ({ login, email, password, avatarImage }) =>
-  async dispatch => {
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
-
-      await updateProfile(auth.currentUser, {
-        displayName: login,
-        photoURL: avatarImage,
-      });
-
-      const { uid, displayName, photoURL } = auth.currentUser;
-
-      dispatch(
-        updateUserProfile({
-          userId: uid,
-          login: displayName,
-          email,
-          avatarImage: photoURL,
-        })
-      );
-    } catch (error) {
-      Alert.alert(error.message);
-    }
-  };
-export const authSignInUser =
-  ({ email, password }) =>
-  async (dispatch, getState) => {
-    try {
-      const user = await signInWithEmailAndPassword(auth, email, password);
-    } catch (error) {
-      Alert.alert("Error! Email or password doesn't match!");
-    }
-  };
-export const authSignOutUser = () => async (dispatch, getState) => {
+export const register = (name, email, password, photo) => async dispatch => {
   try {
-    await signOut(auth);
-    dispatch(authSignOut());
+    await createUserWithEmailAndPassword(auth, email, password);
+    const user = auth.currentUser;
+    await updateProfile(user, {
+      displayName: name,
+      photoURL: photo,
+    });
+
+    const {
+      uid,
+      displayName,
+      email: emailBase,
+      photoURL,
+    } = await auth.currentUser;
+
+    const userUpdateData = {
+      userId: uid,
+      name: displayName,
+      email: emailBase,
+      avatar: photoURL,
+    };
+
+    dispatch(updateUserProfile(userUpdateData));
+    return user;
   } catch (error) {
-    Alert.alert(error.message);
+    console.log(error.message);
+    return error.message;
+  }
+};
+
+export const login = (email, password) => async () => {
+  try {
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    return userCredential;
+  } catch (error) {
+    console.log(error.message);
+    return error.message;
   }
 };
 
 export const authStateChangeUser = () => async dispatch => {
-  await onAuthStateChanged(auth, user => {
-    try {
-      if (user) {
-        const userUpdateProfile = {
-          email: user.email,
-          avatarImage: user.photoURL,
-          login: user.displayName,
-          userId: user.uid,
-        };
+  onAuthStateChanged(auth, user => {
+    if (user) {
+      const userUpdateData = {
+        userId: user.uid,
+        name: user.displayName,
+        email: user.email,
+        avatar: user.photoURL,
+      };
 
-        dispatch(updateUserProfile(userUpdateProfile));
-        dispatch(authStateChange({ stateChange: true }));
-      }
-    } catch (error) {
-      Alert.alert(error.message);
+      dispatch(authStateChange({ stateChange: true }));
+      dispatch(updateUserProfile(userUpdateData));
     }
   });
+};
+
+export const logout = () => async dispatch => {
+  await signOut(auth);
+  dispatch(authLogOut());
+};
+
+export const updateUserAvatar = dbAvatar => async dispatch => {
+  try {
+    const user = auth.currentUser;
+    await updateProfile(user, {
+      photoURL: dbAvatar,
+    });
+
+    const {
+      uid,
+      displayName,
+      email: emailBase,
+      photoURL,
+    } = await auth.currentUser;
+
+    const userUpdateData = {
+      userId: uid,
+      name: displayName,
+      email: emailBase,
+      avatar: photoURL,
+    };
+
+    dispatch(updateUserProfile(userUpdateData));
+    return user;
+  } catch (error) {
+    console.log(error.message);
+  }
 };
